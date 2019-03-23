@@ -35,6 +35,9 @@ lnode new_node_with(int data)
 }
 
 void free_node(lnode node)
+/*
+  Free a node recusivly.
+ */
 {
   if (node != NULL)
     {
@@ -76,7 +79,7 @@ void print_list(ll list)
 }
 
 
-void append(ll list, int data)
+void append_list(ll list, int data)
 {
   if (list->head == NULL)
     {
@@ -84,14 +87,14 @@ void append(ll list, int data)
       (list->size)++;
       return;
     }
-  lnode *node_addr = &(list->head);
-  lnode node_prev;
-  while ((*node_addr)->next != NULL)
-    node_addr = &(*node_addr)->next;
-  node_prev = *(node_addr);
-  node_addr = &(*node_addr)->next;
-  *node_addr = new_node_with(data);
-  (*node_addr)->prev = node_prev;
+  lnode node = new_node_with(data);
+  lnode last = list->head;
+  while (last->next != NULL)
+    last = last->next;
+  last->next = node;
+  node->prev = last;
+
+
   (list->size)++;
 }
 
@@ -100,7 +103,7 @@ void add_from_array(ll list, int arr[], int size)
   int i;
   for (i=0;i<size;i++)
     {
-      append(list, arr[i]);
+      append_list(list, arr[i]);
     }
 }
 
@@ -118,19 +121,14 @@ lnode* list_index(ll list, int index)
   return node;
 }
 
-void insert(ll list, lnode node, int index)
+void insert_node(ll list, lnode node, int index)
 {
-  int size = list->size;
-  int i;
-  lnode *node_addr = list_index(list, index);
-  lnode node_next;
-  lnode node_prev;
-  node_prev = (*node_addr)->prev;
-  node_next = (*node_addr);
-  (*node_addr) = node;
-  (*node_addr)->next = node_next;
-  (*node_addr)->prev = node_prev;
-  (list->size)++;
+  lnode node_add = *(list_index(list, index));
+  node->next = node_add;
+  node->prev = node_add->prev;
+  node->prev->next = node;
+  node->next->prev = node;
+  list->size++;
 }
 
 void add_from_input(ll list)
@@ -138,16 +136,14 @@ void add_from_input(ll list)
   int c;
   int i;
   while((scanf("%d\n", &i))!=EOF)
-    append(list, i);
+    append_list(list, i);
 }
 
-void reverse(ll list)
+void remove_node(ll list, int index)
 {
-  int size = list->size;
-  lnode * new_head = list_index(list, size-1);
-  int i;
-  for (i=0;i<size;i++)
-    {
-
-    }
+  lnode node_rm = *(list_index(list, index));
+  node_rm->prev->next = node_rm->next;
+  node_rm->next->prev = node_rm->prev;
+  free(node_rm);
+  list->size--;
 }

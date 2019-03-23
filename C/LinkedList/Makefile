@@ -15,3 +15,5 @@ ll.o:	ll.c ${HDR}
 clean:
 	rm -f ${OBJ} ${TRG}
 	rm -f *~
+test:
+	./rand.sh 10 100 | ./${TRG}
