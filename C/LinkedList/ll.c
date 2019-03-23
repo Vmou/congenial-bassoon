@@ -1,7 +1,7 @@
 /*
   Author: Vmou
   Email:  vmou@outlook.com
-  Data:   Mar, 22, 2019
+  Date:   Mar, 22, 2019
   File:   ll.c
 */
 
